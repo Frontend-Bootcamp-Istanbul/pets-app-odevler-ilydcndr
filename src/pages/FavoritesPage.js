@@ -1,11 +1,20 @@
 import React from 'react';
 
-function FavoritesPage() {
+
+class FavoritesPage extends React.Component {
+        constructor(props){
+        super(props)
+            this.state={
+
+            }
+        }
+
+    render(){
     return (
         <div>
-            FavoritesPage
+            {console.log(this.props)}
         </div>
-    );
+    )}
 }
 
 export default FavoritesPage;

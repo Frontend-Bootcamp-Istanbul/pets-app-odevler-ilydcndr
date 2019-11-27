@@ -2,6 +2,7 @@ import React from 'react';
 import {Pet} from "../components";
 import {getPets} from "../constants";
 import {stringContains} from "../helpers";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 
 class PetList extends React.Component{
@@ -11,7 +12,9 @@ class PetList extends React.Component{
         this.state = {
             _pets: [],
             pets: [],
-            yukleniyor: true
+            yukleniyor: true,
+            items:Array.from({length: 4}),
+            hasmore:true
         }
     }
 
@@ -23,6 +26,21 @@ class PetList extends React.Component{
                 yukleniyor: false
             })
         })
+    }
+
+    goruntuekle=()=>{
+        if(this.state.pets.length>=37){
+            this.setState({
+                 hasmore:false
+            });
+            return;
+        }
+        setTimeout(()=>{
+            this.setState={
+                    item:this.state.items.concat(Array.from({length :4}))
+            };
+
+        },1500);
     }
 
     componentDidUpdate(prevProps) {
@@ -56,13 +74,34 @@ class PetList extends React.Component{
     render(){
         const Yukleniyor = <div>Yukleniyor</div>;
         const EmptyPets = <div>Bulunamadı</div>;
-        const Pets =  [<h3>Gösterilen Pet Sayısı: 5</h3>,<div className="row">
+        const Pets =  [<h3>Gösterilen Pet Sayısı: {this.state.pets.length}</h3>,
+        
+            <div id="scrollableDiv" style={{overflow:"auto"}}>
+
+            <InfiniteScroll
+                dataLength={this.state.pets.length}
+                next={this.goruntuekle}
+                hasMore={this.state.hasmore}
+                loader={<div className="loader" key={0}>loading...</div>}
+                endMessage={
+                    <p style={{textAlign:"center"}}>the END!</p>
+                }
+                scrollableTarget="scrollableDiv">
+
+             <div className="row">
             {
                 this.state.pets.map((pet) => {
                     return <Pet key={Math.random()} {...pet} />
                 })
+                
             }
-        </div>];
+             
+             </div>
+        </InfiniteScroll>
+        </div>
+        
+        ];
+           
         if(this.state.yukleniyor){
             return Yukleniyor;
         }else if(this.state.pets.length === 0){
@@ -71,6 +110,7 @@ class PetList extends React.Component{
             return Pets;
         }
     }
+   
 }
 
 

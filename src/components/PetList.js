@@ -2,6 +2,7 @@ import React from 'react';
 import {Pet} from "../components";
 import {getPets} from "../constants";
 import {stringContains} from "../helpers";
+import debounce from "lodash.debounce";
 
 
 class PetList extends React.Component{
@@ -12,10 +13,44 @@ class PetList extends React.Component{
             _pets: [],
             pets: [],
             yukleniyor: true,
+            gosterilecek:[]
            
         }
-        
-    }
+
+        window.onscroll = debounce(() => {
+            const {AfterFirstLoadPet}= this;
+
+            if (
+                window.innerHeight + document.documentElement.scrollTop
+                === document.documentElement.offsetHeight
+              ) {
+                AfterFirstLoadPet();
+              }
+            }, 1000);
+    } 
+
+
+      FirstloadPet=()=>{
+          const gosterilecek=this.state.gosterilecek
+              this.setState({
+                        gosterilecek:gosterilecek.concat(this.state.pets.slice(0,4))
+              },()=>{
+                  console.log(gosterilecek)
+              })       
+          }
+     
+
+     AfterFirstLoadPet=()=>{
+            this.setState({
+                gosterilecek:(this.state.pets.slice(0,4))
+            })
+         }
+
+    componentWillMount() {
+            this.AfterFirstLoadPet();
+        }
+       
+      
 
     componentDidMount() {
         getPets().then((data) => {
@@ -23,9 +58,12 @@ class PetList extends React.Component{
                 _pets: data,
                 pets: data,
                 yukleniyor: false,
+            },()=>{
+                this.FirstloadPet();
             })
         })
     }
+
 
 
     componentDidUpdate(prevProps) {
@@ -63,7 +101,7 @@ class PetList extends React.Component{
         
              <div className="row h-100">
             {
-                this.state.pets.map((pet) => {
+                this.state.gosterilecek.map((pet) => {
                     return <Pet style={{height:"1000px"}} key={Math.random()} {...pet} />
                 })
                 
@@ -78,8 +116,8 @@ class PetList extends React.Component{
             return Pets;
         }
     }
-   
 }
+
 
 
 export default PetList;

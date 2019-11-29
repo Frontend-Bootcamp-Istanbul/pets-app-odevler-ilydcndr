@@ -1,5 +1,6 @@
 import React from 'react';
 import {Sidebar, PetList} from "../components";
+import { Agent } from 'http';
 
 
 class HomePage extends React.Component{
@@ -19,9 +20,10 @@ class HomePage extends React.Component{
         document.title = "Pets App";
     }
 
-    filterPets = (breed) => {
+    filterPets = (breed,age) => {
         this.setState({
-            activeFilter: breed
+            activeFilter: breed,
+            yetiskinolmadurumu:age,
         });
     }
 

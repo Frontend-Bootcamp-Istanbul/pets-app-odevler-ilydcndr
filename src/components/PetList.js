@@ -2,7 +2,6 @@ import React from 'react';
 import {Pet} from "../components";
 import {getPets} from "../constants";
 import {stringContains} from "../helpers";
-import InfiniteScroll from "react-infinite-scroll-component";
 
 
 class PetList extends React.Component{
@@ -13,9 +12,9 @@ class PetList extends React.Component{
             _pets: [],
             pets: [],
             yukleniyor: true,
-            items:Array.from({length: 4}),
-            hasmore:true
+           
         }
+        
     }
 
     componentDidMount() {
@@ -23,25 +22,11 @@ class PetList extends React.Component{
             this.setState({
                 _pets: data,
                 pets: data,
-                yukleniyor: false
+                yukleniyor: false,
             })
         })
     }
 
-    goruntuekle=()=>{
-        if(this.state.pets.length>=37){
-            this.setState({
-                 hasmore:false
-            });
-            return;
-        }
-        setTimeout(()=>{
-            this.setState={
-                    item:this.state.items.concat(Array.from({length :4}))
-            };
-
-        },1500);
-    }
 
     componentDidUpdate(prevProps) {
         if(prevProps.activeFilter !== this.props.activeFilter){
@@ -76,35 +61,18 @@ class PetList extends React.Component{
         const EmptyPets = <div>Bulunamadı</div>;
         const Pets =  [<h3>Gösterilen Pet Sayısı: {this.state.pets.length}</h3>,
         
-            <div id="scrollableDiv" style={{overflow:"auto"}}>
-
-            <InfiniteScroll
-                dataLength={this.state.pets.length}
-                next={this.goruntuekle}
-                hasMore={this.state.hasmore}
-                loader={<div className="loader" key={0}>loading...</div>}
-                endMessage={
-                    <p style={{textAlign:"center"}}>the END!</p>
-                }
-                scrollableTarget="scrollableDiv">
-
-             <div className="row">
+             <div className="row h-100">
             {
                 this.state.pets.map((pet) => {
-                    return <Pet key={Math.random()} {...pet} />
+                    return <Pet style={{height:"1000px"}} key={Math.random()} {...pet} />
                 })
                 
             }
-             
-             </div>
-        </InfiniteScroll>
-        </div>
-        
-        ];
+            </div>]
            
-        if(this.state.yukleniyor){
+          if(this.state.yukleniyor){
             return Yukleniyor;
-        }else if(this.state.pets.length === 0){
+          }else if(this.state.pets.length === 0){
             return EmptyPets
         }else{
             return Pets;

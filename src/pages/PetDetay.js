@@ -21,17 +21,26 @@ class PetDetay extends React.Component{
 
     render(){
     return(
-        <div>
-        {console.log(this.props)}
-
-         <div style={{color:"red",fontWeight:"40px"}}>{this.state.petbilgi.name}</div> 
-
-         <div className="w-25,h-25" ><img src={this.state.petbilgi.image}></img></div>
-          
-          {this.state.petbilgi.age}
-          {this.state.petbilgi.breed}
-          {this.state.petbilgi.description}
+        <div class="container mt-5 h-100">
+        <div class="card col-12 col-md-12 col-sm-12 h-100" >
+        {console.log(this.state.petbilgi)}
+        <img class="card-img-top w-50 mt-5" style={{marginLeft:"250px",height:"300px"}} src={this.state.petbilgi.image}></img>
+        <div class="card-body">
+         <h5 class="card-title" style={{color:"green",fontWeight:"bolder"}}>{this.state.petbilgi.name}</h5>
+         <p class="card-subtitle mb-2 text-muted ">{this.state.petbilgi.breed}</p>
+       <span class="card-subtitle mb-2 badge badge-pill badge-success"><span class="badge badge-warning">AGE=</span>{this.state.petbilgi.age}</span>
+       <p class="card-text">{this.state.petbilgi.description}</p>
+       <button class="btn btn-success"> Favorilere ekle</button>
+       
         </div>
+        </div>
+        </div>
+        
+        
+        
+        
+        
+
     )
     
     }
